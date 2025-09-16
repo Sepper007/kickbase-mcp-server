@@ -6,7 +6,7 @@ export class KickbaseApiClient {
     private readonly headers: Record<string, string>;
 
     constructor() {
-        this.baseUrl = `${CONFIG.KICKBASE_API_BASE}/leagues/${CONFIG.LEAGUE_ID}`;
+        this.baseUrl = `${CONFIG.KICKBASE_API_BASE}/leagues/${process.env.LEAGUE_ID}`;
         this.headers = {
             // @ts-ignore
             'Cookie': process.env.KB_COOKIE,

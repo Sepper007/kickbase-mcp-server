@@ -58,6 +58,7 @@ src/
             "command": "node",
             "args": ["<project-directory>/kickbase_mcp_server/build/index.js"],
             "env": {
+                "LEAGUE_ID": "123456789"
                 "KB_COOKIE": "kkstrauth=eyXxX"
             }
         }
