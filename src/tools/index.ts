@@ -51,3 +51,18 @@ export function createMakeOfferTool(kickbaseService: KickbaseService) {
         }
     };
 }
+
+export function createGetMySquadTool(kickbaseService: KickbaseService) {
+    return {
+        name: "get-my-kickbase-squad",
+        config: {
+            title: "Get my current Kickbase squad",
+            description: "Returns all players currently in my squad/team",
+            inputSchema: {}
+        },
+        handler: async () => {
+            const squad = await kickbaseService.getMySquad();
+            return ToolResponseBuilder.createTextResponse(squad);
+        }
+    };
+}

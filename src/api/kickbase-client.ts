@@ -1,10 +1,10 @@
 import { CONFIG } from '../config/constants.js';
-import type { PlayerMarketItem, PlayerData, MarketValueData } from '../types/kickbase.types.js';
+import type { PlayerMarketItem, PlayerData, MarketValueData, SquadData } from '../types/kickbase.types.js';
 
 export class KickbaseApiClient {
     private readonly baseUrl: string;
     private readonly headers: Record<string, string>;
-
+    
     constructor() {
         this.baseUrl = `${CONFIG.KICKBASE_API_BASE}/leagues/${process.env.LEAGUE_ID}`;
         this.headers = {
@@ -13,7 +13,7 @@ export class KickbaseApiClient {
             'Content-Type': 'application/json',
         };
     }
-
+    
     private async makeRequest<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
         const url = `${this.baseUrl}${endpoint}`;
         const response = await fetch(url, {
@@ -23,39 +23,46 @@ export class KickbaseApiClient {
                 ...options.headers,
             },
         });
-
+        
         if (!response.ok) {
             throw new Error(`Kickbase API error! Status: ${response.status}, Endpoint: ${endpoint}`);
         }
-
+        
         return response.json();
     }
-
+    
     async getMarketPlayers(): Promise<{ it: PlayerMarketItem[] }> {
         console.error('Fetching market data...');
         const data = await this.makeRequest<{ it: PlayerMarketItem[] }>('/market');
         console.error(`Resolved market data: ${JSON.stringify(data)}`);
         return data;
     }
-
+    
     async getPlayerData(playerId: string): Promise<PlayerData> {
         console.error(`Making player data request for player with id ${playerId}`);
         const data = await this.makeRequest<PlayerData>(`/players/${playerId}`);
         console.error(`Player data: ${JSON.stringify(data)}`);
         return data;
     }
-
+    
     async getPlayerMarketValue(playerId: string, timeframe: number = CONFIG.DEFAULT_MV_TIMEFRAME): Promise<MarketValueData> {
         console.error(`Fetching market value data for player ${playerId}`);
         const data = await this.makeRequest<MarketValueData>(`/players/${playerId}/marketvalue/${timeframe}`);
         console.error(`Player market value data: ${JSON.stringify(data)}`);
         return data;
     }
-
+    
     async makeOffer(playerId: string, price: number): Promise<void> {
         await this.makeRequest(`/market/${playerId}/offers`, {
             method: 'POST',
             body: JSON.stringify({ price }),
         });
+    }
+    
+    async getMySquad(): Promise<SquadData> {
+        console.error('Fetching squad data...');
+        const data = await this.makeRequest<SquadData>('/squad');
+        console.error(`Squad data: ${JSON.stringify(data)}`);
+        return data;
     }
 }

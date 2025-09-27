@@ -6,7 +6,8 @@ import { KickbaseService } from '../services/kickbase.service.js';
 import { 
     createGetPlayerInfoTool, 
     createListMarketTool, 
-    createMakeOfferTool 
+    createMakeOfferTool,
+    createGetMySquadTool
 } from '../tools/index.js';
 
 export class KickbaseMcpServer {
@@ -34,6 +35,7 @@ export class KickbaseMcpServer {
             createGetPlayerInfoTool(this.kickbaseService),
             createListMarketTool(this.kickbaseService),
             createMakeOfferTool(this.kickbaseService),
+            createGetMySquadTool(this.kickbaseService)
         ];
 
         tools.forEach(tool => {
